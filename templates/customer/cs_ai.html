@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chat Mimin Unik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Background pattern ala WA */
+        .bg-chat-pattern {
+            background-color: #e5ded8;
+            background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans" x-data="chatSystem()">
+
+    <div class="max-w-md mx-auto bg-chat-pattern h-screen flex flex-col relative shadow-xl">
+        
+        <header class="bg-[#075e54] text-white p-3 flex items-center z-10 shadow-md">
+            <a href="/" class="mr-2 p-1 hover:bg-white/10 rounded-full transition">
+                <i data-lucide="arrow-left" class="w-6 h-6"></i>
+            </a>
+            <div class="w-10 h-10 bg-white rounded-full flex justify-center items-center overflow-hidden mr-3">
+                <i data-lucide="bot" class="w-6 h-6 text-[#075e54]"></i>
+            </div>
+            <div class="flex-1 flex flex-col">
+                <span class="font-bold text-base leading-tight">Mimin Unik</span>
+                <span class="text-xs text-green-100" x-text="isTyping ? 'sedang mengetik...' : 'Online'"></span>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto p-4 space-y-3" id="chatContainer">
+            <div class="flex flex-col items-start">
+                <div class="bg-white text-gray-800 p-3 rounded-tr-xl rounded-br-xl rounded-bl-xl shadow-sm max-w-[85%] text-sm">
+                    Halo bre! Gua Mimin Unik. Mau nyari barang aneh buat kado, buat nge-prank, atau buat dipakai sendiri? Tanya aja ke gua! 🪄
+                </div>
+            </div>
+
+            <template x-for="(msg, index) in messages" :key="index">
+                <div class="flex flex-col" :class="msg.role === 'user' ? 'items-end' : 'items-start'">
+                    <div class="p-3 shadow-sm max-w-[85%] text-sm relative"
+                         :class="msg.role === 'user' 
+                                 ? 'bg-[#dcf8c6] text-gray-800 rounded-tl-xl rounded-tr-xl rounded-bl-xl' 
+                                 : 'bg-white text-gray-800 rounded-tr-xl rounded-br-xl rounded-bl-xl'">
+                        <span x-html="formatMessage(msg.text)"></span>
+                    </div>
+                </div>
+            </template>
+            
+            <div x-show="isTyping" class="flex flex-col items-start">
+                <div class="bg-white p-3 rounded-tr-xl rounded-br-xl rounded-bl-xl shadow-sm">
+                    <div class="flex space-x-1 items-center h-4">
+                        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="bg-transparent p-2 pb-4">
+            <form @submit.prevent="sendMessage" class="flex items-center gap-2">
+                <input type="text" x-model="inputText" placeholder="Ketik pesan..." 
+                       class="flex-1 rounded-full py-3 px-5 border-none shadow-md focus:ring-2 focus:ring-[#075e54] outline-none text-sm"
+                       :disabled="isTyping">
+                <button type="submit" 
+                        class="w-12 h-12 bg-[#008f68] rounded-full flex justify-center items-center shadow-md text-white hover:bg-[#075e54] transition disabled:opacity-50"
+                        :disabled="!inputText.trim() || isTyping">
+                    <i data-lucide="send" class="w-5 h-5 ml-1"></i>
+                </button>
+            </form>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('chatSystem', () => ({
+                inputText: '',
+                messages: [],
+                isTyping: false,
+
+                async sendMessage() {
+                    if(!this.inputText.trim()) return;
+                    
+                    const userText = this.inputText;
+                    this.messages.push({ role: 'user', text: userText });
+                    this.inputText = '';
+                    this.isTyping = true;
+                    this.scrollToBottom();
+
+                    try {
+                        // Nembak ke API FastAPI yang nanti lu bikin di main.py
+                        const response = await fetch('/api/chat', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ message: userText })
+                        });
+                        const data = await response.json();
+                        
+                        this.messages.push({ role: 'bot', text: data.reply });
+                    } catch (error) {
+                        this.messages.push({ role: 'bot', text: "Waduh bre, sinyal gua lagi jelek nih. Coba lagi ya!" });
+                    } finally {
+                        this.isTyping = false;
+                        this.scrollToBottom();
+                    }
+                },
+
+                formatMessage(text) {
+                    // Simple formatter: ubah *tebal* jadi <b>tebal</b> kaya WA
+                    return text.replace(/\*(.*?)\*/g, '<b>$1</b>').replace(/\n/g, '<br/>');
+                },
+
+                scrollToBottom() {
+                    setTimeout(() => {
+                        const container = document.getElementById('chatContainer');
+                        container.scrollTop = container.scrollHeight;
+                    }, 50);
+                }
+            }))
+        });
+        lucide.createIcons();
+    </script>
+</body>
+</html>
