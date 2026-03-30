@@ -1,0 +1,53 @@
+{% extends "admin/base.html" %}
+{% block title %}Arus Kas | Barang Unik{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <h1 class="text-2xl font-bold text-slate-800">Buku Kas (Ledger)</h1>
+    <p class="text-slate-500 text-sm mt-1">Pantau pergerakan duit masuk dan keluar otomatis di sini.</p>
+</div>
+
+<div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+    <div class="px-6 py-4 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
+        <h2 class="font-bold text-slate-700">Riwayat Transaksi Terakhir</h2>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="text-slate-400 text-xs uppercase tracking-wider border-b">
+                    <th class="px-6 py-3 font-bold">Tanggal</th>
+                    <th class="px-6 py-3 font-bold">Kategori</th>
+                    <th class="px-6 py-3 font-bold">Deskripsi</th>
+                    <th class="px-6 py-3 font-bold text-right">Nominal (Rp)</th>
+                </tr>
+            </thead>
+            <tbody class="text-sm divide-y divide-slate-100">
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="px-6 py-4 text-slate-500">2026-03-31 10:00</td>
+                    <td class="px-6 py-4">
+                        <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-bold">Penjualan Barang Unik</span>
+                    </td>
+                    <td class="px-6 py-4 text-slate-700">Pencairan dana otomatis dari order UNIK-2603-A1B2</td>
+                    <td class="px-6 py-4 font-black text-green-600 text-right">+ 150.000</td>
+                </tr>
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="px-6 py-4 text-slate-500">2026-03-30 15:30</td>
+                    <td class="px-6 py-4">
+                        <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-bold">Iklan FB/IG</span>
+                    </td>
+                    <td class="px-6 py-4 text-slate-700">Bayar tagihan Meta Ads bulan Maret</td>
+                    <td class="px-6 py-4 font-black text-red-600 text-right">- 500.000</td>
+                </tr>
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="px-6 py-4 text-slate-500">2026-03-29 09:15</td>
+                    <td class="px-6 py-4">
+                        <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-bold">Penjualan Barang Unik</span>
+                    </td>
+                    <td class="px-6 py-4 text-slate-700">Pencairan dana otomatis dari order UNIK-2603-X9Y8</td>
+                    <td class="px-6 py-4 font-black text-green-600 text-right">+ 350.000</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
