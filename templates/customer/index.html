@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Barang Unik | Temukan Keunikanmu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Sembunyiin scrollbar biar clean di HP */
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-slate-800" x-data="cartSystem()">
+
+    <nav class="fixed top-0 w-full bg-white border-b border-gray-200 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 flex items-center gap-2">
+                    <i data-lucide="sparkles" class="w-6 h-6 text-yellow-500"></i>
+                    <span class="font-black text-xl tracking-tight">BARANG<span class="text-yellow-500">UNIK</span></span>
+                </div>
+                
+                <button @click="isCartOpen = true" class="relative p-2 text-gray-600 hover:text-yellow-600 transition">
+                    <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+                    <span x-show="totalItems > 0" x-text="totalItems" class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-500 rounded-full"></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="pt-24 pb-8 px-4 max-w-7xl mx-auto text-center">
+        <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight mb-4">
+            Bukan Barang Biasa.<br/>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-orange-500">Pasti Bikin Melongo.</span>
+        </h1>
+        <p class="text-gray-500 text-sm md:text-base max-w-2xl mx-auto">
+            Kumpulan barang paling aneh, ajaib, tapi dijamin berguna buat hidup lu. Garansi bikin temen lu nanya "Beli di mana tuh?!"
+        </p>
+    </div>
+
+    <main class="max-w-7xl mx-auto px-4 pb-24">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            
+            {% if produk %}
+                {% for item in produk %}
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col">
+                    <div class="relative pt-[100%] bg-gray-100">
+                        <img src="{{ item.image_url or 'https://placehold.co/400x400/eeeeee/a3a3a3?text=Unik' }}" alt="{{ item.name }}" class="absolute inset-0 w-full h-full object-cover">
+                    </div>
+                    <div class="p-4 flex flex-col flex-grow">
+                        <h3 class="text-sm md:text-base font-bold text-gray-800 line-clamp-2">{{ item.name }}</h3>
+                        <p class="text-xs text-yellow-600 mt-1 line-clamp-1 font-medium bg-yellow-50 inline-block px-2 py-0.5 rounded-md self-start">✨ {{ item.why_its_unique[:30] }}...</p>
+                        
+                        <div class="mt-auto pt-4 flex items-center justify-between">
+                            <span class="font-black text-gray-900">Rp {{ "{:,.0f}".format(item.price).replace(',', '.') }}</span>
+                        </div>
+                        
+                        <button @click="addToCart({{ item.id }}, '{{ item.name }}', {{ item.price }}, '{{ item.image_url }}')" class="mt-3 w-full bg-slate-900 hover:bg-yellow-500 hover:text-slate-900 text-white font-bold py-2 rounded-xl transition-colors flex justify-center items-center text-sm">
+                            <i data-lucide="plus" class="w-4 h-4 mr-1"></i> Sikat!
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col col-span-2 md:col-span-1">
+                    <div class="relative pt-[100%] bg-gray-100">
+                        <img src="https://placehold.co/400x400/eeeeee/a3a3a3?text=Jam+Lari" class="absolute inset-0 w-full h-full object-cover">
+                    </div>
+                    <div class="p-4 flex flex-col flex-grow">
+                        <h3 class="text-sm md:text-base font-bold text-gray-800">Jam Weker Lari (Clocky)</h3>
+                        <p class="text-xs text-yellow-600 mt-1 font-medium bg-yellow-50 inline-block px-2 py-0.5 rounded-md self-start">✨ Lari pas bunyi, susah dimatiin</p>
+                        <div class="mt-auto pt-4">
+                            <span class="font-black text-gray-900">Rp 150.000</span>
+                        </div>
+                        <button @click="addToCart(1, 'Jam Weker Lari', 150000, '')" class="mt-3 w-full bg-slate-900 hover:bg-yellow-500 hover:text-slate-900 text-white font-bold py-2 rounded-xl transition-colors flex justify-center items-center text-sm">
+                            <i data-lucide="plus" class="w-4 h-4 mr-1"></i> Sikat!
+                        </button>
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+    </main>
+
+    <a href="/ai-assistant" class="fixed bottom-6 right-6 bg-yellow-400 text-slate-900 p-4 rounded-full shadow-2xl hover:bg-yellow-500 hover:scale-105 transition-transform z-30 flex items-center justify-center">
+        <i data-lucide="bot" class="w-7 h-7"></i>
+    </a>
+
+    <div x-show="isCartOpen" class="relative z-50" aria-labelledby="slide-over-title" role="dialog" aria-modal="true" style="display: none;">
+        <div x-show="isCartOpen" x-transition.opacity class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+
+        <div class="fixed inset-0 overflow-hidden">
+            <div class="absolute inset-0 overflow-hidden">
+                <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+                    <div x-show="isCartOpen" 
+                         x-transition:enter="transform transition ease-in-out duration-300 sm:duration-500" 
+                         x-transition:enter-start="translate-x-full" 
+                         x-transition:enter-end="translate-x-0" 
+                         x-transition:leave="transform transition ease-in-out duration-300 sm:duration-500" 
+                         x-transition:leave-start="translate-x-0" 
+                         x-transition:leave-end="translate-x-full" 
+                         class="pointer-events-auto w-screen max-w-md">
+                        
+                        <div class="flex h-full flex-col bg-white shadow-xl">
+                            <div class="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
+                                <div class="flex items-start justify-between">
+                                    <h2 class="text-lg font-bold text-gray-900" id="slide-over-title">Keranjang Belanja</h2>
+                                    <button @click="isCartOpen = false" type="button" class="relative -m-2 p-2 text-gray-400 hover:text-gray-500">
+                                        <i data-lucide="x" class="w-6 h-6"></i>
+                                    </button>
+                                </div>
+
+                                <div class="mt-8">
+                                    <div class="flow-root">
+                                        <div x-show="cart.length === 0" class="text-center py-10">
+                                            <i data-lucide="shopping-bag" class="w-12 h-12 mx-auto text-gray-300 mb-3"></i>
+                                            <p class="text-gray-500">Yah, keranjang lu masih kosong bre.</p>
+                                        </div>
+
+                                        <ul role="list" class="-my-6 divide-y divide-gray-200">
+                                            <template x-for="item in cart" :key="item.id">
+                                                <li class="flex py-6">
+                                                    <div class="h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                                        <img :src="item.image || 'https://placehold.co/100'" alt="Produk" class="h-full w-full object-cover object-center">
+                                                    </div>
+                                                    <div class="ml-4 flex flex-1 flex-col">
+                                                        <div>
+                                                            <div class="flex justify-between text-base font-medium text-gray-900">
+                                                                <h3 x-text="item.name" class="line-clamp-1"></h3>
+                                                                <p class="ml-4 whitespace-nowrap" x-text="'Rp ' + formatRupiah(item.price * item.qty)"></p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex flex-1 items-end justify-between text-sm mt-2">
+                                                            <div class="flex items-center border rounded-lg">
+                                                                <button @click="minQty(item.id)" class="px-2 py-1 text-gray-600 hover:bg-gray-100">-</button>
+                                                                <span class="px-3 font-bold" x-text="item.qty"></span>
+                                                                <button @click="addQty(item.id)" class="px-2 py-1 text-gray-600 hover:bg-gray-100">+</button>
+                                                            </div>
+                                                            <button @click="removeItem(item.id)" type="button" class="font-medium text-red-600 hover:text-red-500">Hapus</button>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </template>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="border-t border-gray-200 px-4 py-6 sm:px-6">
+                                <div class="flex justify-between text-base font-bold text-gray-900">
+                                    <p>Total Tagihan</p>
+                                    <p x-text="'Rp ' + formatRupiah(cartTotal)"></p>
+                                </div>
+                                <p class="mt-0.5 text-sm text-gray-500">Belum termasuk ongkos kirim ya bre.</p>
+                                <div class="mt-6">
+                                    <button @click="goToCheckout()" :disabled="cart.length === 0" class="flex w-full items-center justify-center rounded-xl border border-transparent bg-slate-900 px-6 py-4 text-base font-bold text-white shadow-sm hover:bg-yellow-500 hover:text-slate-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                                        Lanjut Bayar &rarr;
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('cartSystem', () => ({
+                isCartOpen: false,
+                cart: [],
+
+                init() {
+                    // Cek LocalStorage pas pertama buka web
+                    const savedCart = localStorage.getItem('unik_cart');
+                    if (savedCart) {
+                        this.cart = JSON.parse(savedCart);
+                    }
+                },
+
+                saveCart() {
+                    localStorage.setItem('unik_cart', JSON.stringify(this.cart));
+                },
+
+                addToCart(id, name, price, image) {
+                    const existingItem = this.cart.find(item => item.id === id);
+                    if (existingItem) {
+                        existingItem.qty += 1;
+                    } else {
+                        this.cart.push({ id, name, price, image, qty: 1 });
+                    }
+                    this.saveCart();
+                    this.isCartOpen = true; // Buka laci keranjang otomatis
+                },
+
+                addQty(id) {
+                    const item = this.cart.find(item => item.id === id);
+                    if (item) { item.qty += 1; this.saveCart(); }
+                },
+
+                minQty(id) {
+                    const item = this.cart.find(item => item.id === id);
+                    if (item && item.qty > 1) { 
+                        item.qty -= 1; 
+                        this.saveCart(); 
+                    } else if (item && item.qty === 1) {
+                        this.removeItem(id);
+                    }
+                },
+
+                removeItem(id) {
+                    this.cart = this.cart.filter(item => item.id !== id);
+                    this.saveCart();
+                },
+
+                get totalItems() {
+                    return this.cart.reduce((total, item) => total + item.qty, 0);
+                },
+
+                get cartTotal() {
+                    return this.cart.reduce((total, item) => total + (item.price * item.qty), 0);
+                },
+
+                formatRupiah(number) {
+                    return new Intl.NumberFormat('id-ID').format(number);
+                },
+
+                goToCheckout() {
+                    // Nanti lu bisa arahin ke /checkout atau langsung tembak ke link WA API
+                    window.location.href = '/checkout';
+                }
+            }))
+        })
+        
+        // Render Icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
