@@ -1,0 +1,41 @@
+/* static/css/style.css */
+
+/* 1. Modifikasi Scrollbar Biar Elegan (Khusus Webkit: Chrome/Safari) */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1; /* Warna abu-abu kalem */
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8; /* Agak gelap pas di-hover */
+}
+
+/* Sembunyiin scrollbar di body utama biar kayak aplikasi native di HP */
+body::-webkit-scrollbar {
+    display: none; 
+}
+body {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* 2. Background Chat Mimin Unik (Ala WhatsApp) */
+.bg-chat-pattern {
+    background-color: #e5ded8;
+    background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+}
+
+/* 3. Animasi tambahan kalau dibutuhin */
+.smooth-shadow {
+    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+.smooth-shadow:hover {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
