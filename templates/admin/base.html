@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin | Barang Unik{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 font-sans leading-normal tracking-normal" x-data="{ sidebarOpen: false }">
+    <div class="flex h-screen overflow-hidden">
+        
+        <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-white transition-transform duration-300 ease-in-out md:relative md:translate-x-0 shadow-xl">
+            <div class="flex items-center justify-center h-16 bg-slate-950 border-b border-slate-800">
+                <i data-lucide="sparkles" class="w-6 h-6 text-yellow-400 mr-2"></i>
+                <span class="text-xl font-bold tracking-wider text-white">BARANG<span class="text-yellow-400">UNIK</span></span>
+            </div>
+            
+            <nav class="p-4 space-y-2 mt-4">
+                <a href="/admin" class="flex items-center p-3 rounded-lg hover:bg-slate-800 transition-colors bg-slate-800 text-yellow-400">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i> Dashboard
+                </a>
+                <a href="/admin/inventory" class="flex items-center p-3 rounded-lg hover:bg-slate-800 transition-colors text-gray-300 hover:text-white">
+                    <i data-lucide="package-open" class="w-5 h-5 mr-3"></i> Katalog Barang
+                </a>
+                <a href="/admin/orders" class="flex items-center p-3 rounded-lg hover:bg-slate-800 transition-colors text-gray-300 hover:text-white">
+                    <i data-lucide="shopping-cart" class="w-5 h-5 mr-3"></i> Pesanan Masuk
+                </a>
+                <a href="/admin/finance" class="flex items-center p-3 rounded-lg hover:bg-slate-800 transition-colors text-gray-300 hover:text-white">
+                    <i data-lucide="wallet" class="w-5 h-5 mr-3"></i> Arus Kas
+                </a>
+            </nav>
+        </aside>
+
+        <div class="flex-1 flex flex-col overflow-hidden">
+            
+            <header class="flex items-center justify-between px-6 py-4 bg-white border-b shadow-sm">
+                <button @click="sidebarOpen = !sidebarOpen" class="text-gray-500 focus:outline-none md:hidden">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                
+                <div class="flex items-center justify-end w-full">
+                    <div class="flex items-center text-sm">
+                        <span class="mr-4 text-gray-700 font-medium hidden sm:block">Halo, Bos Admin!</span>
+                        <a href="/admin/logout" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 font-medium flex items-center transition-colors">
+                            <i data-lucide="log-out" class="w-4 h-4 mr-2"></i> Keluar
+                        </a>
+                    </div>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-4 md:p-6">
+                {% block content %}{% endblock %}
+            </main>
+            
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

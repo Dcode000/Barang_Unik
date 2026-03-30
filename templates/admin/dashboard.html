@@ -1,0 +1,94 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Dashboard | Barang Unik{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+    <h1 class="text-2xl font-bold text-slate-800">Ringkasan Hari Ini</h1>
+    <p class="text-slate-500 text-sm mt-1">Pantau performa penjualan barang aneh lu di sini bre.</p>
+</div>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    
+    <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100 flex items-center hover:shadow-md transition-shadow">
+        <div class="p-3 rounded-full bg-emerald-100 text-emerald-600 mr-4">
+            <i data-lucide="circle-dollar-sign" class="w-7 h-7"></i>
+        </div>
+        <div>
+            <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Total Pendapatan</p>
+            <p class="text-2xl font-extrabold text-slate-800 mt-1">Rp 1.250.000</p>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100 flex items-center hover:shadow-md transition-shadow">
+        <div class="p-3 rounded-full bg-blue-100 text-blue-600 mr-4">
+            <i data-lucide="shopping-bag" class="w-7 h-7"></i>
+        </div>
+        <div>
+            <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Pesanan Baru</p>
+            <p class="text-2xl font-extrabold text-slate-800 mt-1">12 <span class="text-sm font-normal text-slate-400">paket</span></p>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100 flex items-center hover:shadow-md transition-shadow">
+        <div class="p-3 rounded-full bg-purple-100 text-purple-600 mr-4">
+            <i data-lucide="box" class="w-7 h-7"></i>
+        </div>
+        <div>
+            <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Katalog Aktif</p>
+            <p class="text-2xl font-extrabold text-slate-800 mt-1">45 <span class="text-sm font-normal text-slate-400">item</span></p>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100 flex items-center hover:shadow-md transition-shadow">
+        <div class="p-3 rounded-full bg-orange-100 text-orange-600 mr-4">
+            <i data-lucide="users" class="w-7 h-7"></i>
+        </div>
+        <div>
+            <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Pengunjung Web</p>
+            <p class="text-2xl font-extrabold text-slate-800 mt-1">312 <span class="text-sm font-normal text-slate-400">orang</span></p>
+        </div>
+    </div>
+</div>
+
+<div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+    <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center">
+        <h2 class="text-lg font-bold text-slate-800">Pesanan Masuk (Real-time)</h2>
+        <a href="/admin/orders" class="text-sm text-blue-600 hover:text-blue-800 font-semibold">Lihat Semua &rarr;</a>
+    </div>
+    
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
+                    <th class="px-6 py-4 font-bold">No. Order</th>
+                    <th class="px-6 py-4 font-bold">Pembeli</th>
+                    <th class="px-6 py-4 font-bold">Barang</th>
+                    <th class="px-6 py-4 font-bold">Total Nilai</th>
+                    <th class="px-6 py-4 font-bold text-center">Status</th>
+                </tr>
+            </thead>
+            <tbody class="text-sm divide-y divide-slate-100">
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="px-6 py-4 font-bold text-slate-700">#ORD-001</td>
+                    <td class="px-6 py-4 text-slate-600">Budi Santoso</td>
+                    <td class="px-6 py-4 text-slate-600">Jam Weker Lari (x1)</td>
+                    <td class="px-6 py-4 font-bold text-slate-800">Rp 250.000</td>
+                    <td class="px-6 py-4 text-center">
+                        <span class="inline-block px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-bold">Perlu Dikirim</span>
+                    </td>
+                </tr>
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="px-6 py-4 font-bold text-slate-700">#ORD-002</td>
+                    <td class="px-6 py-4 text-slate-600">Siti Aisyah</td>
+                    <td class="px-6 py-4 text-slate-600">Gelas Aduk Otomatis (x2)</td>
+                    <td class="px-6 py-4 font-bold text-slate-800">Rp 190.000</td>
+                    <td class="px-6 py-4 text-center">
+                        <span class="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">Dikirim</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
